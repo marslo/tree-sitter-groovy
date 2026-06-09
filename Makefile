@@ -27,6 +27,10 @@ CODESIGN ?= codesign
 NVIM_PARSER := groovy.so
 NVIM_PARSER_DIR ?= $(HOME)/.local/share/nvim/site/parser
 
+# tree-sitter CLI parser cache (used by `tree-sitter parse/highlight` outside the
+# repo). The CLI normally rebuilds this on its own; `cli-install` forces it.
+TS_CACHE_DIR ?= $(HOME)/.cache/tree-sitter/lib
+
 # ABI versioning
 SONAME_MAJOR := $(word 1,$(subst ., ,$(VERSION)))
 SONAME_MINOR := $(word 2,$(subst ., ,$(VERSION)))
@@ -109,12 +113,22 @@ endif
 
 nvim: $(NVIM_PARSER)
 
-# build, re-sign and install into Neovim's runtime parser directory
-nvim-install: $(NVIM_PARSER)
+# build, re-sign and install into Neovim's runtime parser directory.
+# also refreshes the tree-sitter CLI cache (cli-install) so `:InspectTree` and
+# the `tree-sitter` command line stay in sync.
+nvim-install: $(NVIM_PARSER) cli-install
 	install -d '$(NVIM_PARSER_DIR)'
 	install -m755 $(NVIM_PARSER) '$(NVIM_PARSER_DIR)/$(NVIM_PARSER)'
 ifeq ($(shell uname),Darwin)
 	$(CODESIGN) --force --sign - '$(NVIM_PARSER_DIR)/$(NVIM_PARSER)'
+endif
+
+# build the parser into the tree-sitter CLI cache (mac: groovy.dylib, linux: groovy.so)
+cli-install: $(SRC_DIR)/parser.c
+	install -d '$(TS_CACHE_DIR)'
+	$(TS) build -o '$(TS_CACHE_DIR)/groovy.$(SOEXT)'
+ifeq ($(shell uname),Darwin)
+	$(CODESIGN) --force --sign - '$(TS_CACHE_DIR)/groovy.$(SOEXT)'
 endif
 
 install: all
@@ -140,4 +154,4 @@ clean:
 test:
 	$(TS) test
 
-.PHONY: all install uninstall clean test nvim nvim-install
+.PHONY: all install uninstall clean test nvim nvim-install cli-install
