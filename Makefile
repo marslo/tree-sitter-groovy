@@ -17,6 +17,16 @@ endif
 
 TS ?= tree-sitter
 
+# code signing (macOS only):
+# `tree-sitter build` / the linker emit a "linker-signed" ad-hoc signature which
+# macOS refuses to dlopen (SIGKILL / "Code Signature Invalid"). Re-signing with a
+# plain ad-hoc signature fixes it.
+CODESIGN ?= codesign
+
+# neovim tree-sitter parser (the file neovim actually loads: parser/groovy.so)
+NVIM_PARSER := groovy.so
+NVIM_PARSER_DIR ?= $(HOME)/.local/share/nvim/site/parser
+
 # ABI versioning
 SONAME_MAJOR := $(word 1,$(subst ., ,$(VERSION)))
 SONAME_MINOR := $(word 2,$(subst ., ,$(VERSION)))
@@ -70,6 +80,9 @@ lib$(LANGUAGE_NAME).$(SOEXT): $(OBJS)
 ifneq ($(STRIP),)
 	$(STRIP) $@
 endif
+ifeq ($(shell uname),Darwin)
+	$(CODESIGN) --force --sign - $@
+endif
 
 $(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
 	sed  -e 's|@URL@|$(PARSER_URL)|' \
@@ -82,7 +95,27 @@ $(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
 		-e 's|@PREFIX@|$(PREFIX)|' $< > $@
 
 $(SRC_DIR)/parser.c: grammar.js
-	$(TS) generate --no-bindings
+	$(TS) generate
+
+# --- Neovim parser (groovy.so) ----------------------------------------------
+# Build the parser that Neovim loads and (on macOS) re-sign it. Without the
+# codesign step Neovim crashes on startup with SIGKILL ("Code Signature
+# Invalid") when dlopen'ing a linker-signed parser.
+$(NVIM_PARSER): $(SRC_DIR)/parser.c
+	$(TS) build -o $@
+ifeq ($(shell uname),Darwin)
+	$(CODESIGN) --force --sign - $@
+endif
+
+nvim: $(NVIM_PARSER)
+
+# build, re-sign and install into Neovim's runtime parser directory
+nvim-install: $(NVIM_PARSER)
+	install -d '$(NVIM_PARSER_DIR)'
+	install -m755 $(NVIM_PARSER) '$(NVIM_PARSER_DIR)/$(NVIM_PARSER)'
+ifeq ($(shell uname),Darwin)
+	$(CODESIGN) --force --sign - '$(NVIM_PARSER_DIR)/$(NVIM_PARSER)'
+endif
 
 install: all
 	install -d '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter '$(DESTDIR)$(PCLIBDIR)' '$(DESTDIR)$(LIBDIR)'
@@ -102,9 +135,9 @@ uninstall:
 		'$(DESTDIR)$(PCLIBDIR)'/$(LANGUAGE_NAME).pc
 
 clean:
-	$(RM) $(OBJS) $(LANGUAGE_NAME).pc lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT)
+	$(RM) $(OBJS) $(LANGUAGE_NAME).pc lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT) $(NVIM_PARSER)
 
 test:
 	$(TS) test
 
-.PHONY: all install uninstall clean test
+.PHONY: all install uninstall clean test nvim nvim-install
