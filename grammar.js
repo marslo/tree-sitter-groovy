@@ -265,10 +265,13 @@ module.exports = grammar({
             $.groovy_doc_throws,
             $.groovy_doc_tag,
             $.groovy_doc_at_text,
-            /([^@*]|\*[^/])([^*\s@]|[^\s\n]@|\*[^/])+/,
+            // banner / divider lines made of a run of asterisks, e.g. `********`.
+            // a run of `*` is only valid as content when it is not the `*/` or `**/` terminator.
+            /\*+[^*/]/,
+            /([^@*]|\*[^*/])([^*\s@]|[^\s\n]@|\*[^*/])+/,
           ),
         ),
-        '*/'
+        choice('*/', '**/'),
       ),
 
     groovy_doc_param: $ => seq (
