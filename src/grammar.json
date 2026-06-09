@@ -1859,14 +1859,27 @@
               },
               {
                 "type": "PATTERN",
-                "value": "([^@*]|\\*[^/])([^*\\s@]|[^\\s\\n]@|\\*[^/])+"
+                "value": "\\*+[^*/]"
+              },
+              {
+                "type": "PATTERN",
+                "value": "([^@*]|\\*[^*/])([^*\\s@]|[^\\s\\n]@|\\*[^*/])+"
               }
             ]
           }
         },
         {
-          "type": "STRING",
-          "value": "*/"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "*/"
+            },
+            {
+              "type": "STRING",
+              "value": "**/"
+            }
+          ]
         }
       ]
     },
