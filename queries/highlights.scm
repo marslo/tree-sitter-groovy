@@ -92,6 +92,7 @@
 (map (map_item key: (identifier) @variable.parameter))
 
 (parameter type: (identifier) @type name: (identifier) @variable.parameter)
+(multiple_assignment_variable type: (identifier) @type)
 (generic_param name: (identifier) @variable.parameter)
 
 (declaration type: (identifier) @type)

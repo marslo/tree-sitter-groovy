@@ -61,6 +61,7 @@ module.exports = grammar({
         $.groovy_import,
         $.groovy_package,
         $.assignment,
+        $.multiple_assignment,
         $.class_definition,
         $.declaration,
         $.do_while_loop,
@@ -317,6 +318,30 @@ module.exports = grammar({
           )
         ),
       ),
+    ),
+
+    // groovy multiple (tuple) assignment:
+    //   def (a, b) = list
+    //   def (List diffs, Boolean isAncestor) = foo ? bar() : [[], false]
+    //   (a, b) = [1, 2]
+    multiple_assignment: $ => prec(2, seq(
+      choice(
+        seq('def', '(', list_of($.multiple_assignment_variable), ')'),
+        seq(
+          '(',
+          $.multiple_assignment_variable,
+          repeat1(seq(',', $.multiple_assignment_variable)),
+          optional(','),
+          ')',
+        ),
+      ),
+      '=',
+      field('value', $._expression),
+    )),
+
+    multiple_assignment_variable: $ => seq(
+      optional(choice(field('type', $._type), 'def')),
+      field('name', $.identifier),
     ),
 
     parenthesized_expression: ($) =>

@@ -1,0 +1,49 @@
+==========
+Typed multiple assignment
+==========
+def ( List diffs, Boolean isAncestor ) = foo ? bar() : [ [], false ]
+---
+(source_file
+  (multiple_assignment
+    (multiple_assignment_variable
+      type: (identifier)
+      name: (identifier))
+    (multiple_assignment_variable
+      type: (identifier)
+      name: (identifier))
+    value: (ternary_op
+      condition: (identifier)
+      then: (function_call
+        function: (identifier)
+        args: (argument_list))
+      else: (list
+        (list)
+        (boolean_literal)))))
+==========
+Untyped multiple assignment with def
+==========
+def (a, b) = [1, 2]
+---
+(source_file
+  (multiple_assignment
+    (multiple_assignment_variable
+      name: (identifier))
+    (multiple_assignment_variable
+      name: (identifier))
+    value: (list
+      (number_literal)
+      (number_literal))))
+==========
+Multiple assignment without def
+==========
+(x, y) = [3, 4]
+---
+(source_file
+  (multiple_assignment
+    (multiple_assignment_variable
+      name: (identifier))
+    (multiple_assignment_variable
+      name: (identifier))
+    value: (list
+      (number_literal)
+      (number_literal))))
