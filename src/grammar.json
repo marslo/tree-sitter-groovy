@@ -2392,6 +2392,15 @@
           {
             "type": "SYMBOL",
             "name": "_callable_expression"
+          },
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_closure_call"
+            },
+            "named": true,
+            "value": "juxt_function_call"
           }
         ]
       }
@@ -2420,6 +2429,39 @@
           "name": "_type_identifier"
         }
       ]
+    },
+    "_closure_call": {
+      "type": "PREC_LEFT",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "function",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_juxtable_expression"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "args",
+            "content": {
+              "type": "ALIAS",
+              "content": {
+                "type": "REPEAT1",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "closure"
+                }
+              },
+              "named": true,
+              "value": "argument_list"
+            }
+          }
+        ]
+      }
     },
     "_juxtable_expression": {
       "type": "CHOICE",

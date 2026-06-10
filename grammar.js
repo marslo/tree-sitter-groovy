@@ -369,6 +369,7 @@ module.exports = grammar({
       $.list,
       $.map,
       $._callable_expression,
+      alias($._closure_call, $.juxt_function_call),
     )),
 
     _callable_expression: $ => choice(
@@ -378,6 +379,15 @@ module.exports = grammar({
       $._juxtable_expression,
       $._type_identifier,
     ),
+
+    // method call whose argument is a trailing closure with no parens,
+    // e.g. `list.collect { it.branch }`. Modeled as a primary expression so it
+    // works as an argument (`foo( list.collect { it } )`) and chains
+    // (`list.collect { it }.join('\n')`).
+    _closure_call: $ => prec.left(2, seq(
+      field('function', $._juxtable_expression),
+      field('args', alias(repeat1($.closure), $.argument_list)),
+    )),
 
     _juxtable_expression: $ => choice(
       $.dotted_identifier,

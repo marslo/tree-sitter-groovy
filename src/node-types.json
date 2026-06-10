@@ -49,6 +49,10 @@
           "named": true
         },
         {
+          "type": "juxt_function_call",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -144,6 +148,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {
@@ -257,6 +265,10 @@
           "named": true
         },
         {
+          "type": "juxt_function_call",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -336,6 +348,10 @@
           "named": true
         },
         {
+          "type": "juxt_function_call",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -412,6 +428,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {
@@ -501,6 +521,10 @@
           },
           {
             "type": "index",
+            "named": true
+          },
+          {
+            "type": "juxt_function_call",
             "named": true
           },
           {
@@ -757,6 +781,10 @@
           },
           {
             "type": "index",
+            "named": true
+          },
+          {
+            "type": "juxt_function_call",
             "named": true
           },
           {
@@ -1055,6 +1083,10 @@
             "named": true
           },
           {
+            "type": "juxt_function_call",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -1323,6 +1355,10 @@
           "named": true
         },
         {
+          "type": "juxt_function_call",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -1557,6 +1593,10 @@
           },
           {
             "type": "index",
+            "named": true
+          },
+          {
+            "type": "juxt_function_call",
             "named": true
           },
           {
@@ -1833,6 +1873,10 @@
           },
           {
             "type": "index",
+            "named": true
+          },
+          {
+            "type": "juxt_function_call",
             "named": true
           },
           {
@@ -2845,6 +2889,10 @@
           "named": true
         },
         {
+          "type": "juxt_function_call",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -2909,6 +2957,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {
@@ -2988,6 +3040,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {
@@ -3120,6 +3176,10 @@
           "named": true
         },
         {
+          "type": "juxt_function_call",
+          "named": true
+        },
+        {
           "type": "list",
           "named": true
         },
@@ -3236,6 +3296,10 @@
             "named": true
           },
           {
+            "type": "juxt_function_call",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -3322,6 +3386,10 @@
           },
           {
             "type": "index",
+            "named": true
+          },
+          {
+            "type": "juxt_function_call",
             "named": true
           },
           {
@@ -3498,6 +3566,10 @@
             "named": true
           },
           {
+            "type": "juxt_function_call",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -3594,6 +3666,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {
@@ -3730,6 +3806,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {
@@ -4057,6 +4137,10 @@
             "named": true
           },
           {
+            "type": "juxt_function_call",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -4135,6 +4219,10 @@
             "named": true
           },
           {
+            "type": "juxt_function_call",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -4210,6 +4298,10 @@
           },
           {
             "type": "index",
+            "named": true
+          },
+          {
+            "type": "juxt_function_call",
             "named": true
           },
           {
@@ -4477,6 +4569,10 @@
             "named": true
           },
           {
+            "type": "juxt_function_call",
+            "named": true
+          },
+          {
             "type": "list",
             "named": true
           },
@@ -4599,6 +4695,10 @@
         },
         {
           "type": "index",
+          "named": true
+        },
+        {
+          "type": "juxt_function_call",
           "named": true
         },
         {

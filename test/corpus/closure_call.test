@@ -1,0 +1,58 @@
+==========
+Trailing closure call as argument
+==========
+foo( list.collect { it.branch }, bar )
+---
+(source_file
+  (function_call
+    function: (identifier)
+    args: (argument_list
+      (juxt_function_call
+        function: (dotted_identifier
+          (identifier)
+          (identifier))
+        args: (argument_list
+          (closure
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (identifier))))
+==========
+Trailing closure call as assignment value
+==========
+x = list.collect { it.branch }
+---
+(source_file
+  (assignment
+    (identifier)
+    (juxt_function_call
+      function: (dotted_identifier
+        (identifier)
+        (identifier))
+      args: (argument_list
+        (closure
+          (dotted_identifier
+            (identifier)
+            (identifier)))))))
+==========
+Chained method call after trailing closure
+==========
+y = (a + b).collect { it }.join()
+---
+(source_file
+  (assignment
+    (identifier)
+    (function_call
+      function: (dotted_identifier
+        (juxt_function_call
+          function: (dotted_identifier
+            (parenthesized_expression
+              (binary_op
+                (identifier)
+                (identifier)))
+            (identifier))
+          args: (argument_list
+            (closure
+              (identifier))))
+        (identifier))
+      args: (argument_list))))

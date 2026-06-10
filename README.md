@@ -15,10 +15,8 @@
 
 ## Building & installing
 
-The `Makefile` provides convenience targets for building the parser and
-installing it where Neovim and the `tree-sitter` CLI expect it. They wrap
-`tree-sitter generate` / `tree-sitter build`, so after editing `grammar.js`
-the generated sources (`src/parser.c`, …) are refreshed automatically.
+The `Makefile` provides convenience targets for building the parser and installing it where Neovim and the `tree-sitter` CLI expect it.
+They wrap `tree-sitter generate` / `tree-sitter build`, so after editing `grammar.js` the generated sources (`src/parser.c`, …) are refreshed automatically.
 
 | TARGET              | WHAT IT DOES                                                                                                                                      | OUTPUT                                                       |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
@@ -28,8 +26,38 @@ the generated sources (`src/parser.c`, …) are refreshed automatically.
 
 ```sh
 # after changing grammar.js, rebuild & install everywhere:
-make nvim-install
+$ make nvim-install
+install -d '~/.cache/tree-sitter/lib'
+tree-sitter build -o '~/.cache/tree-sitter/lib/groovy.dylib'
+codesign --force --sign - '~/.cache/tree-sitter/lib/groovy.dylib'
+~/.cache/tree-sitter/lib/groovy.dylib: replacing existing signature
+install -d '~/.local/share/nvim/site/parser'
+install -m755 groovy.so '~/.local/share/nvim/site/parser/groovy.so'
+codesign --force --sign - '~/.local/share/nvim/site/parser/groovy.so'
+~/.local/share/nvim/site/parser/groovy.so: replacing existing signature
 ```
+
+### nvim nvim-treesitter plugin integration
+
+```vim
+" .vimrc
+Plug 'nvim-treesitter/nvim-treesitter', { 'branch': 'main', 'do': ':TSUpdate' }
+```
+
+```lua
+-- init.lua
+pcall(function()
+  require('nvim-treesitter.parsers').groovy = {
+    install_info = {
+      path    = '/opt/groovy/tree-sitter-groovy',
+      queries = 'queries',
+    },
+  }
+end)
+```
+
+- [`:TSUpdateAll`](https://github.com/marslo/dotfiles/blob/main/.config/nvim/lua/config/nvim-treesitter.lua#L146-L171) - updates all parsers and re-build local groovy.so and installs it to Neovim's parser dir.
+- [`:TSUpdateGroovy`](https://github.com/marslo/dotfiles/blob/main/.marslo/vimrc.d/functions#L424-L439) - rebuilds the local `groovy.so` and installs it to Neovim's parser dir, without updating other parsers.
 
 Overridable variables:
 
